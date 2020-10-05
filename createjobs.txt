@@ -43,8 +43,8 @@ then
       defaultContent('Team Production, This Email is Generated to Inform you that your Webserver is Successfully Deployed. You can check your website using your VM IP_address at Port 81')
       contentType('text/html')
       triggers {
-        success() {
-      attachBuildLog(true)
+        success {
+        attachBuildLog(true)
         subject('Deployment Successfully')
         content('Container is Successfully Deployed')
         sendTo {
