@@ -44,7 +44,7 @@ then
       contentType('text/html')
       triggers {
 	beforeBuild()
-        Success {
+        success() {
       attachBuildLog(true)
         subject('Deployment Successfully')
         content('Container is Successfully Deployed')
