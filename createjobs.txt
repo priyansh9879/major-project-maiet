@@ -47,7 +47,7 @@ fi''')
           success{
         attachBuildLog(true)
           subject('Deployment Successfull')
-          content('Hello Production Team, this Email is Generated to inform you that your Deployment for creating webserver is successfully fulfilled. you can check the Website at $(echo "http://$(sudo docker inspect -f '{{ .NetworkSettings.Networks.bridge.IPAddress}}' webserver):80")')
+          content('Hello Production Team, this Email is Generated to inform you that your Deployment for creating webserver is successfully fulfilled. you can check the Website at Port 81')
           sendTo {
             recipientList()
           }
