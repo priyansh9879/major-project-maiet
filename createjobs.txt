@@ -27,7 +27,7 @@ description ("Deploy the code In the webserver")
     }
     steps {
       shell('''
-if sudo ls /github | grep .html
+if sudo ls /root/project_files/ | grep .html
 then
     sudo docker pull priyansh9879/centos-apachephp:8
     if sudo docker ps -a | grep webserver
