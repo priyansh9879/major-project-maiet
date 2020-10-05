@@ -18,22 +18,23 @@ description ("Deploy the code In the webserver")
     upstream('Job1-git_pull','SUCCESS')
     }
     steps {
-      shell('''if sudo ls /root/project_files/induko/ | grep index.html
+      shell('''
+if sudo ls /root/project_files/induko/ | grep index.html
 then
-    sudo docker pull priyansh9879/centos-apachephp:8
-    if sudo docker ps -a | grep webserver
-    then
-        if sudo docker ps | grep webserver
-        then
-            echo Container is Already Running
-        fi
-        echo Starting Exisiting Container http-webserver
-        sudo docker start webserver
-        sleep 2s
+  sudo docker pull priyansh9879/centos-apachephp:8
+  if sudo docker ps -a | grep webserver
+  then
+    if sudo docker ps | grep webserver
+      then
+        echo Container is Already Running
+      fi
+      echo Starting Exisiting Container http-webserver
+      sudo docker start webserver
+      sleep 2s
     else
-        echo Building Container webserver
-        sudo docker run -dit --name webserver -v /root/project_files/induko/:/var/www/html/ -p 81:80 priyansh9879/centos-apachephp:8
-    fi''')
+      echo Building Container webserver
+      sudo docker run -dit --name webserver -v /root/project_files/induko/:/var/www/html/ -p 81:80 priyansh9879/centos-apachephp:8
+  fi''')
     }
     publishers {
     extendedEmail {
