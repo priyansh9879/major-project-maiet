@@ -33,7 +33,7 @@ then
         sleep 2s
     else
         echo Building Container webserver
-        sudo docker run -dit --name webserver -v /root/project_files/induco/:/var/www/html/ -p 81:80 priyansh9879/centos-apachephp:8
+        sudo docker run -dit --name webserver -v /root/project_files/induko/:/var/www/html/ -p 81:80 priyansh9879/centos-apachephp:8
     fi''')
     }
     publishers {
