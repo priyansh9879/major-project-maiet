@@ -7,7 +7,15 @@ description ("Pulls the code from GitHub")
         scm('* * * * *')
     }
   steps {
-    shell('sudo cp -rvf * /root/project_files/')
+    shell('''
+if sudo ls /root/ | grep project_files
+then
+	echo folder already exists
+else
+	mkdir /root/project_files
+fi
+
+sudo cp -rvf * /root/project_files/')
   }
 }
 
