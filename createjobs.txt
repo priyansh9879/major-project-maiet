@@ -34,8 +34,27 @@ then
     else
       echo Building Container webserver
       sudo docker run -dit --name webserver -v /root/project_files/induko/:/var/www/html/ -p 81:80 priyansh9879/centos-apachephp:8
-  fi''')
+  fi
+fi''')
     }
+     publishers {
+      extendedEmail {
+        recipientList('mittalsudhanshu29@gmail.com')
+        defaultSubject('Build Failed')
+        defaultContent('Dear Team Developer, this email is generated to inform you that the build has Failed. Please Find the Attested Logs Below')
+        contentType('text/html')
+        triggers {
+          success{
+        attachBuildLog(true)
+          subject('Deployment Successfull')
+          content('Hello Production Team, this Email is Generated to inform you that your Deployment for creating webserver is successfully fulfilled. you can check the Website at $(echo "http://$(sudo docker inspect -f '{{ .NetworkSettings.Networks.bridge.IPAddress}}' webserver):80")')
+          sendTo {
+            recipientList()
+          }
+        }
+      }
+    }
+  }
 }
 
 
@@ -57,19 +76,19 @@ else
 	exit 1
 fi''')
     }
-  publishers {
-    extendedEmail {
-      recipientList('mittalsudhanshu29@gmail.com')
-      defaultSubject('Build Failed')
-      defaultContent('Dear Team Developer, this email is generated to inform you that the build has Failed. Please Find the Attested Logs Below')
-      contentType('text/html')
-      triggers {
-        failure{
-      attachBuildLog(true)
-        subject('Failed Build')
-        content('The build was failed')
-        sendTo {
-          developers()
+    publishers {
+      extendedEmail {
+        recipientList('mittalsudhanshu29@gmail.com')
+        defaultSubject('Build Failed')
+        defaultContent('Dear Team Developer, this email is generated to inform you that the build has Failed. Please Find the Attested Logs Below')
+        contentType('text/html')
+        triggers {
+          failure{
+        attachBuildLog(true)
+          subject('Failed Build')
+          content('The build was failed')
+          sendTo {
+            recipientList()
           }
         }
       }
