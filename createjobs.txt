@@ -36,24 +36,6 @@ then
       sudo docker run -dit --name webserver -v /root/project_files/induko/:/var/www/html/ -p 81:80 priyansh9879/centos-apachephp:8
   fi''')
     }
-    publishers {
-    extendedEmail {
-      recipientList('mittalsudhanshu29@gmail.com')
-      defaultSubject('Container Created Successfully')
-      defaultContent('Team Production, This Email is Generated to Inform you that your Webserver is Successfully Deployed. You can check your website using your VM IP_address at Port 81')
-      contentType('text/html')
-      triggers {
-        success {
-        attachBuildLog(true)
-        subject('Deployment Successfully')
-        content('Container is Successfully Deployed')
-        sendTo {
-          recipientList()
-          }
-        }
-      }
-    }
-  }
 }
 
 
