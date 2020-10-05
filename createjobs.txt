@@ -1,0 +1,96 @@
+job("Job1-git_pull") {
+description ("Pulls the code from GitHub")
+  scm{
+    github('priyansh9879/major-project-maiet','master')
+  }
+  triggers {
+        scm('* * * * *')
+    }
+  steps {
+    shell('sudo cp -rvf * /root/project_files/')
+  }
+}
+
+
+job("Job2-deploy_webserver") {
+description ("Deploy the code In the webserver")
+  triggers {
+    upstream('Job1-git_pull','SUCCESS')
+    }
+    steps {
+      shell('''
+if sudo ls /github | grep .html
+then
+    sudo docker pull priyansh9879/centos-apachephp:8
+    if sudo docker ps -a | grep webserver
+    then
+        if sudo docker ps | grep webserver
+        then
+            echo Container is Already Running
+        fi
+        echo Starting Exisiting Container http-webserver
+        sudo docker start webserver
+        sleep 2s
+    else
+        echo Building Container webserver
+        sudo docker run -dit --name webserver -v /root/project_files/induco/:/var/www/html/ -p 81:80 priyansh9879/centos-apachephp:8
+    fi''')
+    }
+    publishers {
+    extendedEmail {
+      recipientList('mittalsudhanshu29@gmail.com')
+      defaultSubject('Container Created Successfully')
+      defaultContent('Team Production, This Email is Generated to Inform you that your Webserver is Successfully Deployed. You can check your website using your VM IP_address at Port 81')
+      contentType('text/html')
+      triggers {
+        success {
+      attachBuildLog(true)
+        subject('Deployment Successfully')
+        content('Container is Successfully Deployed')
+        sendTo {
+          developers()
+          }
+        }
+      }
+    }
+  }
+}
+
+
+job("Job3-Testing_and_sending_report") {
+description ("Test and code and send the report to developer")
+  triggers {
+    upstream('Job2-deploy_webserver','SUCCESS')
+    }
+    steps {
+      shell('''
+IP="http://$(sudo docker inspect -f '{{ .NetworkSettings.Networks.bridge.IPAddress}}' webserver):80"
+echo $IP
+if sudo curl -s -o /dev/null -w '%{http_code}\n' $IP | grep 200
+then
+	echo "website is Responding Properly"
+	exit 0
+else
+	echo "Website is not Responding Properly"
+	exit 1
+fi''')
+    }
+  publishers {
+    extendedEmail {
+      recipientList('mittalsudhanshu29@gmail.com')
+      defaultSubject('Build Failed')
+      defaultContent('Dear Team Developer, this email is generated to inform you that the build has Failed. Please Find the Attested Logs Below')
+      contentType('text/html')
+      triggers {
+        failure{
+      attachBuildLog(true)
+        subject('Failed Build')
+        content('The build was failed')
+        sendTo {
+          developers()
+          }
+        }
+      }
+    }
+  }
+}
