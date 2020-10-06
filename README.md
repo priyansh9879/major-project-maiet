@@ -102,8 +102,7 @@ In Our Project, we gona use Jenkins to automate all of our Builds and sync them 
 
 ## Groovy Script for the Jobs we gona create in Jenkins:
 
-'''
-job("Job1-git_pull") {
+'''job("Job1-git_pull") {
 description ("Pulls the code from GitHub")
   scm{
     github('priyansh9879/major-project-maiet','master')
@@ -196,8 +195,7 @@ fi''')
       }
     }
   }
-}
-'''
+}'''
 
 For Building a Sed Job, go to (New Item>Give Name – Sed Job>Choose Freestyle project) and configure. Now, after Creating the Complete Sed Job, all we need is to just build the Job. Click on Build and see the creation in action. After waiting for some time, we will get the Email in our Mail that Server is successfully Deployed and is running. We can also check the website like:
  
